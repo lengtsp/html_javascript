@@ -1,0 +1,107 @@
+
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>jQuery UI Datepicker - Default functionality</title>
+  <script src="https://code.jquery.com/jquery-3.6.0.js"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+
+
+
+
+
+<style type="text/css">
+    /* ปรับขนาดตัวอักษรของข้อความใน tabs
+    สามารถปรับเปลี่ยน รายละเอียดอื่นๆ เพิ่มเติมเกี่ยวกับ tabs*/
+    .ui-tabs{ font-family:tahoma; font-size:14px;}
+    </style>
+
+    <style type="text/css">
+    /* Overide css code กำหนดความกว้างของปฏิทินและอื่นๆ */
+    .ui-datepicker{ width:280px; font-family:tahoma; font-size:14px; text-align:center;}
+    </style>
+
+</head>
+<body>
+ 
+<p>Date: <input type="text" id="datepicker"></p>
+ 
+<input name="date1" type="text" id="date1" value="" />
+<input name="date2" type="text" id="date2" value="" />
+<input name="date3" type="text" id="date3" value="" />
+
+
+     <script src="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.13.2/jquery-ui.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.13.2/themes/base/jquery-ui.min.css">
+
+
+<script type="text/javascript">
+
+
+    $(function(){
+        var dateBefore=null;
+
+        function adjustYear(selector) {
+            setTimeout(function(){
+                $.each($(selector), function(){
+                    var textYear = parseInt($(this).val()) + 543;
+                    $(this).text(textYear);
+                });
+            }, 50);
+        }
+
+        function initializeDatepicker(id) {
+
+
+
+            $(id).datepicker({
+                dateFormat: 'dd/mm/yy',
+                showOn: 'button',
+                buttonText: '<i class="fa fa-calendar"></i>', // FontAwesome icon
+                showOn: 'button',
+                // ... ตั้งค่าอื่นๆ ...
+                // buttonImageOnly: false,
+                dayNamesMin: ['อา', 'จ', 'อ', 'พ', 'พฤ', 'ศ', 'ส'],
+                monthNamesShort: ['มกราคม','กุมภาพันธ์','มีนาคม','เมษายน','พฤษภาคม','มิถุนายน','กรกฎาคม','สิงหาคม','กันยายน','ตุลาคม','พฤศจิกายน','ธันวาคม'],
+                changeMonth: true,
+                changeYear: true,
+
+
+                beforeShow: function(){
+                    if($(this).val() != ""){
+                        var arrayDate = $(this).val().split("/");
+                        arrayDate[2] = parseInt(arrayDate[2]) - 543;
+                        $(this).val(arrayDate.join("/"));
+                    }
+                    adjustYear(".ui-datepicker-year option");
+                },
+                onChangeMonthYear: function(){
+                    adjustYear(".ui-datepicker-year option");
+                },
+                onClose: function(){
+                    if($(this).val() != "" && $(this).val() == dateBefore){
+                        var arrayDate = dateBefore.split("/");
+                        arrayDate[2] = parseInt(arrayDate[2]) + 543;
+                        $(this).val(arrayDate.join("/"));
+                    }
+                },
+                onSelect: function(dateText, inst){
+                    dateBefore = $(this).val();
+                    var arrayDate = dateText.split("/");
+                    arrayDate[2] = parseInt(arrayDate[2]) + 543;
+                    $(this).val(arrayDate.join("/"));
+                }
+            });
+        }
+
+        // ใช้งานฟังก์ชันกับทุกช่องใส่วันที่
+        initializeDatepicker('#date1');
+        initializeDatepicker('#date2');
+        initializeDatepicker('#date3');
+    });
+</script>
+
+</body>
+</html>
